@@ -1,0 +1,140 @@
+examples of the date: CREATE TABLE inventory (
+   item_name VARCHAR(100),
+   price DECIMAL(8,2),
+   quantity INT
+);
+SELECT DAYOFWEEK(CURDATE());
+SELECT DAYOFWEEK(NOW());
+SELECT DATE_FORMAT(NOW(), '%w') + 1;
+ 
+SELECT DAYNAME(NOW());
+SELECT DATE_FORMAT(NOW(), '%W');
+ 
+SELECT DATE_FORMAT(CURDATE(), '%m/%d/%Y');
+ 
+SELECT DATE_FORMAT(NOW(), '%M %D at %h:%i');
+ 
+CREATE TABLE tweets(
+   content VARCHAR(140),
+   username VARCHAR(20),
+   created_at TIMESTAMP DEFAULT NOW()
+);
+ 
+INSERT INTO tweets (content, username) VALUES('this is my first tweet', 'coltscat');
+SELECT * FROM tweets;
+ 
+INSERT INTO tweets (content, username) VALUES('this is my second tweet', 'coltscat');
+SELECT * FROM tweets; 
+
+
+
+
+mysql-ctl cli;
+
+show databases;
+
+Instagram
+
+CREATE TABLE photos (
+   id INTEGER AUTO_INCREMENT PRIMARY KEY,
+   image_url VARCHAR(255) NOT NULL,
+   user_id INTEGER NOT NULL,
+   created_at TIMESTAMP DEFAULT NOW(),
+   FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+Start with the USERS
+
+ 
+CREATE TABLE users (
+   id INTEGER AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(255) UNIQUE NOT NULL,
+   created_at TIMESTAMP DEFAULT NOW()
+);
+ 
+
+Photos
+
+CREATE TABLE photos (
+   id INTEGER AUTO_INCREMENT PRIMARY KEY,
+   image_url VARCHAR(255) NOT NULL,
+   user_id INTEGER NOT NULL,
+   created_at TIMESTAMP DEFAULT NOW(),
+   FOREIGN KEY(user_id) REFERENCES users(id)
+);
+Use 
+
+
+
+
+
+
+PLACENTA EXTRACT
+
+
+LIKES TO USERS- Especially if you do not have much activity. 
+
+
+CREATE TABLE likes (
+   user_id INTEGER NOT NULL,
+   photo_id INTEGER NOT NULL,
+   created_at TIMESTAMP DEFAULT NOW(),
+   FOREIGN KEY(user_id) REFERENCES users(id),
+   FOREIGN KEY(photo_id) REFERENCES photos(id),
+   PRIMARY KEY(user_id, photo_id)
+);
+
+
+
+CODE: IG Clone Followers Schema
+CREATE TABLE follows (
+   follower_id INTEGER NOT NULL,
+   followee_id INTEGER NOT NULL,
+   created_at TIMESTAMP DEFAULT NOW(),
+   FOREIGN KEY(follower_id) REFERENCES users(id),
+   FOREIGN KEY(followee_id) REFERENCES users(id),
+   PRIMARY KEY(follower_id, followee_id)
+);
+
+What is the most liked photo instagram 
+
+
+
+Identify most popular photo (and user who created it)
+SELECT
+   username,
+   photos.id,
+   photos.image_url,
+   COUNT(*) AS total
+FROM photos
+INNER JOIN likes
+   ON likes.photo_id = photos.id
+INNER JOIN users
+   ON photos.user_id = users.id
+GROUP BY photos.id
+ORDER BY total DESC
+LIMIT 1;
+
+
+-- 5. Calculate average number of photos per user
+SELECT (SELECT Count(*)
+       FROM   photos) / (SELECT Count(*)
+                         FROM   users) AS avg;
+Instagram Challenge 6 Solution CODE
+-- 6. Find the five most popular hashtags
+SELECT tags.tag_name, 
+       Count(*) AS total 
+FROM   photo_tags 
+       JOIN tags 
+         ON photo_tags.tag_id = tags.id 
+GROUP  BY tags.id 
+ORDER  BY total DESC 
+LIMIT  5; 
+
+
+7. Finding the bots - the users who have liked every single photo
+
+
+
+
+
